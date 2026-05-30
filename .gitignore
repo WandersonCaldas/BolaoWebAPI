@@ -1,0 +1,9 @@
+/src/.vs
+/src/BolaoWebAPI.Api/bin/Debug
+/src/BolaoWebAPI.Api/obj
+/src/BolaoWebAPI.Api/appsettings.Development.json
+/src/BolaoWebAPI.Api/BolaoWebAPI.Api.csproj.user
+/src/BolaoWebAPI.Domain/obj
+/src/BolaoWebAPI.Domain/bin/Debug
+/src/BolaoWebAPI.Infrastructure/obj
+/src/BolaoWebAPI.Infrastructure/bin/Debug
