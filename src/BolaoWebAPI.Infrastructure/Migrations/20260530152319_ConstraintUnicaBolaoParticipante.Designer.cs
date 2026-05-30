@@ -4,6 +4,7 @@ using BolaoWebAPI.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BolaoWebAPI.Infrastructure.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260530152319_ConstraintUnicaBolaoParticipante")]
+    partial class ConstraintUnicaBolaoParticipante
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -41,9 +44,6 @@ namespace BolaoWebAPI.Infrastructure.Migrations
                         .HasMaxLength(500)
                         .HasColumnType("nvarchar(500)");
 
-                    b.Property<long>("ModalidadeId")
-                        .HasColumnType("bigint");
-
                     b.Property<string>("Nome")
                         .IsRequired()
                         .HasMaxLength(200)
@@ -56,8 +56,6 @@ namespace BolaoWebAPI.Infrastructure.Migrations
                         .HasColumnType("decimal(18,2)");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("ModalidadeId");
 
                     b.ToTable("Boloes", "bolao");
                 });
@@ -98,65 +96,6 @@ namespace BolaoWebAPI.Infrastructure.Migrations
                     b.ToTable("BolaoParticipantes", "bolao");
                 });
 
-            modelBuilder.Entity("BolaoWebAPI.Domain.Entities.Jogo", b =>
-                {
-                    b.Property<long>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("bigint");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"));
-
-                    b.Property<long>("BolaoId")
-                        .HasColumnType("bigint");
-
-                    b.Property<DateTime>("DataCadastro")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("Numeros")
-                        .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("BolaoId");
-
-                    b.ToTable("Jogos", "bolao");
-                });
-
-            modelBuilder.Entity("BolaoWebAPI.Domain.Entities.Modalidade", b =>
-                {
-                    b.Property<long>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("bigint");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"));
-
-                    b.Property<bool>("Ativo")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("Nome")
-                        .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
-
-                    b.Property<int>("NumeroMaximo")
-                        .HasColumnType("int");
-
-                    b.Property<int>("NumeroMinimo")
-                        .HasColumnType("int");
-
-                    b.Property<int>("QuantidadeMaximaNumeros")
-                        .HasColumnType("int");
-
-                    b.Property<int>("QuantidadeMinimaNumeros")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Modalidades", "bolao");
-                });
-
             modelBuilder.Entity("BolaoWebAPI.Domain.Entities.Participante", b =>
                 {
                     b.Property<long>("Id")
@@ -186,15 +125,6 @@ namespace BolaoWebAPI.Infrastructure.Migrations
                     b.ToTable("Participantes", "bolao");
                 });
 
-            modelBuilder.Entity("BolaoWebAPI.Domain.Entities.Bolao", b =>
-                {
-                    b.HasOne("BolaoWebAPI.Domain.Entities.Modalidade", null)
-                        .WithMany()
-                        .HasForeignKey("ModalidadeId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-                });
-
             modelBuilder.Entity("BolaoWebAPI.Domain.Entities.BolaoParticipante", b =>
                 {
                     b.HasOne("BolaoWebAPI.Domain.Entities.Bolao", null)
@@ -206,15 +136,6 @@ namespace BolaoWebAPI.Infrastructure.Migrations
                     b.HasOne("BolaoWebAPI.Domain.Entities.Participante", null)
                         .WithMany()
                         .HasForeignKey("ParticipanteId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("BolaoWebAPI.Domain.Entities.Jogo", b =>
-                {
-                    b.HasOne("BolaoWebAPI.Domain.Entities.Bolao", null)
-                        .WithMany()
-                        .HasForeignKey("BolaoId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
                 });

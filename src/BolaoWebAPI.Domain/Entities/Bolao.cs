@@ -10,6 +10,8 @@ namespace BolaoWebAPI.Domain.Entities
     {
         public long Id { get; set; }
 
+        public long ModalidadeId { get; set; }
+
         public string Nome { get; set; } = string.Empty;
 
         public string? Descricao { get; set; }
@@ -20,6 +22,6 @@ namespace BolaoWebAPI.Domain.Entities
 
         public DateTime DataSorteio { get; set; }
 
-        public bool Ativo { get; set; } = true;
+        public bool Ativo { get; set; } = true;        
     }
 }

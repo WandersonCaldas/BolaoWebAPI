@@ -3,6 +3,7 @@
     public class BolaoResponse
     {
         public long Id { get; set; }
+        public long ModalidadeId { get; set; }
 
         public string Nome { get; set; } = string.Empty;
 

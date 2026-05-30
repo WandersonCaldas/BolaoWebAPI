@@ -16,6 +16,10 @@ namespace BolaoWebAPI.Infrastructure.Data
         }
 
         public DbSet<Bolao> Boloes { get; set; }
+        public DbSet<Participante> Participantes { get; set; }
+        public DbSet<BolaoParticipante> BolaoParticipantes { get; set; }
+        public DbSet<Jogo> Jogos { get; set; }
+        public DbSet<Modalidade> Modalidades { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

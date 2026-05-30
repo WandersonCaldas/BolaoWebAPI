@@ -36,6 +36,14 @@ namespace BolaoWebAPI.Infrastructure.Configurations
 
             builder.Property(x => x.Ativo)
                 .IsRequired();
+
+            builder.Property(x => x.ModalidadeId)
+                .IsRequired();
+
+            builder.HasOne<Modalidade>()
+                .WithMany()
+                .HasForeignKey(x => x.ModalidadeId)
+                .OnDelete(DeleteBehavior.Restrict);
         }
     }
 }

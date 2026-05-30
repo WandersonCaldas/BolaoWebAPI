@@ -88,5 +88,39 @@ namespace BolaoWebAPI.Api.Controllers
 
             return NoContent();
         }
+
+        [HttpGet("{id:long}/resumo")]
+        public async Task<IActionResult> GetResumo(long id)
+        {
+            var bolao = await _context.Boloes.FindAsync(id);
+
+            if (bolao == null || !bolao.Ativo)
+                return NotFound();
+
+            var participantes = await _context.BolaoParticipantes
+                .Where(x => x.BolaoId == id)
+                .ToListAsync();
+
+            var cotasVendidas = participantes.Sum(x => x.QuantidadeCotas);
+            var valorPago = participantes
+                .Where(x => x.Pago)
+                .Sum(x => x.ValorTotal);
+
+            var valorTotalPrevisto = participantes.Sum(x => x.ValorTotal);
+
+            var response = new BolaoResumoResponse
+            {
+                BolaoId = bolao.Id,
+                TotalCotas = bolao.QuantidadeCotas,
+                CotasVendidas = cotasVendidas,
+                CotasDisponiveis = bolao.QuantidadeCotas - cotasVendidas,
+                ValorTotalPrevisto = valorTotalPrevisto,
+                ValorPago = valorPago,
+                ValorPendente = valorTotalPrevisto - valorPago,
+                QuantidadeParticipantes = participantes.Count
+            };
+
+            return Ok(response);
+        }
     }
 }
