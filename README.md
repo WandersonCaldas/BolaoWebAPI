@@ -1,78 +1,23 @@
-# BolaoWebAPI
+# 🎲 BolaoWebAPI
 
-API REST desenvolvida em .NET para gerenciamento de bolões de loteria.
+API REST desenvolvida em .NET 8 para gerenciamento de bolões de loteria.
 
 O projeto foi criado com foco em aprendizado de arquitetura de APIs utilizando ASP.NET Core, Entity Framework Core, SQL Server e AutoMapper, aplicando conceitos de modelagem de domínio, relacionamentos, regras de negócio e consultas consolidadas.
 
-## Funcionalidades
+## 🚀 Funcionalidades
 
-### Modalidades
+* Cadastro de Modalidades
+* Cadastro de Bolões
+* Cadastro de Participantes
+* Controle de Cotas
+* Controle de Pagamentos
+* Cadastro de Jogos
+* Cadastro de Resultados
+* Conferência Automática de Acertos
+* Dashboard do Bolão
+* Rateio Proporcional de Prêmios
 
-* Cadastro de modalidades de loteria
-* Consulta de modalidades
-* Alteração de modalidades
-* Exclusão lógica
-
-Exemplos:
-
-* Mega-Sena
-* Lotofácil
-* Quina
-* Lotomania
-* Timemania
-
-### Bolões
-
-* Cadastro de bolões
-* Alteração de bolões
-* Exclusão lógica
-* Consulta de bolões
-* Resumo do bolão
-* Dashboard do bolão
-
-### Participantes
-
-* Cadastro de participantes
-* Alteração de participantes
-* Exclusão lógica
-* Consulta de participantes
-
-### Participação em Bolões
-
-* Vinculação de participantes ao bolão
-* Controle de cotas
-* Controle de pagamento
-* Atualização da quantidade de cotas
-* Remoção de participantes do bolão
-
-### Jogos
-
-* Cadastro de jogos
-* Alteração de jogos
-* Exclusão de jogos
-* Consulta de jogos por bolão
-
-### Resultados
-
-* Cadastro de resultados de sorteios
-* Consulta de resultados por bolão
-* Exclusão de resultados
-
-### Conferência de Jogos
-
-* Conferência automática dos jogos cadastrados
-* Identificação dos números acertados
-* Quantidade de acertos por jogo
-* Ordenação dos jogos por quantidade de acertos
-
-### Rateio de Prêmios
-
-* Cálculo automático de rateio
-* Distribuição proporcional às cotas adquiridas
-* Exibição do percentual de participação
-* Cálculo individual do valor a receber
-
-## Tecnologias Utilizadas
+## 🛠 Tecnologias
 
 * .NET 8
 * ASP.NET Core Web API
@@ -81,26 +26,25 @@ Exemplos:
 * AutoMapper
 * Swagger / OpenAPI
 
-## Estrutura da Solução
+## 📁 Estrutura da Solução
 
+```text
 BolaoWebAPI.Api
-
-* Controllers
-* Requests
-* Responses
-* Mappings
+├── Controllers
+├── Requests
+├── Responses
+└── Mappings
 
 BolaoWebAPI.Domain
-
-* Entities
+└── Entities
 
 BolaoWebAPI.Infrastructure
+├── Data
+├── Configurations
+└── Migrations
+```
 
-* DbContext
-* Configurations
-* Migrations
-
-## Entidades Principais
+## 📊 Principais Entidades
 
 * Modalidade
 * Bolao
@@ -109,20 +53,61 @@ BolaoWebAPI.Infrastructure
 * Jogo
 * Resultado
 
-## Conceitos Aplicados
+## 📈 Funcionalidades de Negócio
 
-* Entity Framework Core
-* Migrations
-* AutoMapper
-* DTOs
-* Relacionamentos
-* Chaves estrangeiras
-* Consultas agregadas
-* Regras de negócio
-* Dashboard
-* Rateio proporcional
-* Conferência automática de resultados
+### Dashboard
 
-## Objetivo
+Permite visualizar informações consolidadas do bolão:
 
-Este projeto foi desenvolvido com fins educacionais para praticar conceitos utilizados em APIs corporativas modernas utilizando a plataforma .NET.
+* Participantes
+* Jogos cadastrados
+* Cotas vendidas
+* Cotas disponíveis
+* Valor arrecadado
+* Valor recebido
+* Valor pendente
+
+### Conferência de Jogos
+
+Realiza a conferência automática dos jogos cadastrados com o resultado informado.
+
+Exemplo:
+
+```json
+{
+  "jogoId": 1,
+  "quantidadeAcertos": 5,
+  "numerosAcertados": [
+    "01",
+    "02",
+    "03",
+    "04",
+    "05"
+  ]
+}
+```
+
+### Rateio de Prêmios
+
+Calcula automaticamente a distribuição do prêmio com base na quantidade de cotas de cada participante.
+
+Exemplo:
+
+```json
+{
+  "nomeParticipante": "João",
+  "quantidadeCotas": 5,
+  "percentualParticipacao": 50,
+  "valorPremio": 50000
+}
+```
+
+## 📚 Documentação
+
+Documentação complementar disponível em:
+
+* [Modelo de Dados](docs/modelo-banco.md)
+
+## 🎯 Objetivo
+
+Este projeto foi desenvolvido para fins de estudo e prática de desenvolvimento de APIs REST utilizando .NET, Entity Framework Core e SQL Server, simulando cenários comuns encontrados em sistemas corporativos.
