@@ -122,5 +122,99 @@ namespace BolaoWebAPI.Api.Controllers
 
             return Ok(response);
         }
+
+        [HttpGet("{id:long}/dashboard")]
+        public async Task<IActionResult> GetDashboard(long id)
+        {
+            var bolao = await _context.Boloes.FindAsync(id);
+
+            if (bolao == null || !bolao.Ativo)
+                return NotFound();
+
+            var participantes = await _context.BolaoParticipantes
+                .Where(x => x.BolaoId == id)
+                .ToListAsync();
+
+            var quantidadeJogos = await _context.Jogos
+                .CountAsync(x => x.BolaoId == id);
+
+            var cotasVendidas = participantes.Sum(x => x.QuantidadeCotas);
+            var valorRecebido = participantes
+                .Where(x => x.Pago)
+                .Sum(x => x.ValorTotal);
+
+            var valorArrecadado = participantes.Sum(x => x.ValorTotal);
+
+            var response = new BolaoDashboardResponse
+            {
+                BolaoId = bolao.Id,
+                NomeBolao = bolao.Nome,
+                QuantidadeParticipantes = participantes.Count,
+                QuantidadeJogos = quantidadeJogos,
+                CotasVendidas = cotasVendidas,
+                CotasDisponiveis = bolao.QuantidadeCotas - cotasVendidas,
+                ValorArrecadado = valorArrecadado,
+                ValorRecebido = valorRecebido,
+                ValorPendente = valorArrecadado - valorRecebido
+            };
+
+            return Ok(response);
+        }
+
+        [HttpGet("{id:long}/rateio")]
+        public async Task<IActionResult> GetRateio(long id, [FromQuery] decimal valorPremio)
+        {
+            var bolao = await _context.Boloes.FindAsync(id);
+
+            if (bolao == null || !bolao.Ativo)
+                return NotFound();
+
+            var participantesBolao = await _context.BolaoParticipantes
+                .Where(x => x.BolaoId == id && x.Pago)
+                .ToListAsync();
+
+            if (!participantesBolao.Any())
+                return BadRequest("Não existem participantes pagos para calcular o rateio.");
+
+            var totalCotasPagas = participantesBolao.Sum(x => x.QuantidadeCotas);
+
+            var participantesIds = participantesBolao
+                .Select(x => x.ParticipanteId)
+                .ToList();
+
+            var participantes = await _context.Participantes
+                .Where(x => participantesIds.Contains(x.Id))
+                .ToListAsync();
+
+            var rateioParticipantes = participantesBolao.Select(item =>
+            {
+                var participante = participantes.First(x => x.Id == item.ParticipanteId);
+
+                var percentual = (decimal)item.QuantidadeCotas / totalCotasPagas * 100;
+                var valorParticipante = valorPremio * percentual / 100;
+
+                return new RateioParticipanteResponse
+                {
+                    ParticipanteId = participante.Id,
+                    NomeParticipante = participante.Nome,
+                    QuantidadeCotas = item.QuantidadeCotas,
+                    PercentualParticipacao = Math.Round(percentual, 2),
+                    ValorPremio = Math.Round(valorParticipante, 2)
+                };
+            })
+            .OrderByDescending(x => x.ValorPremio)
+            .ToList();
+
+            var response = new RateioResponse
+            {
+                BolaoId = bolao.Id,
+                NomeBolao = bolao.Nome,
+                ValorPremioTotal = valorPremio,
+                TotalCotas = totalCotasPagas,
+                Participantes = rateioParticipantes
+            };
+
+            return Ok(response);
+        }
     }
 }

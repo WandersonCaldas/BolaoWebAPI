@@ -46,6 +46,12 @@ namespace BolaoWebAPI.Api.Mappings
                 .ForMember(dest => dest.Ativo, opt => opt.Ignore());
 
             CreateMap<Modalidade, ModalidadeResponse>();
+            
+            CreateMap<ResultadoCreateRequest, Resultado>()
+                .ForMember(dest => dest.Id, opt => opt.Ignore())
+                .ForMember(dest => dest.DataResultado, opt => opt.MapFrom(src => DateTime.Now));
+
+            CreateMap<Resultado, ResultadoResponse>();
         }
     }
 }
