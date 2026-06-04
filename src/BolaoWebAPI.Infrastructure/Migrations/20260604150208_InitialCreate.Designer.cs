@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BolaoWebAPI.Infrastructure.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20260530155500_CriacaoTabelaModalidadeEAlteracaoBolao")]
-    partial class CriacaoTabelaModalidadeEAlteracaoBolao
+    [Migration("20260604150208_InitialCreate")]
+    partial class InitialCreate
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -189,6 +189,32 @@ namespace BolaoWebAPI.Infrastructure.Migrations
                     b.ToTable("Participantes", "bolao");
                 });
 
+            modelBuilder.Entity("BolaoWebAPI.Domain.Entities.Resultado", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"));
+
+                    b.Property<long>("BolaoId")
+                        .HasColumnType("bigint");
+
+                    b.Property<DateTime>("DataResultado")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("NumerosSorteados")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("BolaoId");
+
+                    b.ToTable("Resultados", "bolao");
+                });
+
             modelBuilder.Entity("BolaoWebAPI.Domain.Entities.Bolao", b =>
                 {
                     b.HasOne("BolaoWebAPI.Domain.Entities.Modalidade", null)
@@ -214,6 +240,15 @@ namespace BolaoWebAPI.Infrastructure.Migrations
                 });
 
             modelBuilder.Entity("BolaoWebAPI.Domain.Entities.Jogo", b =>
+                {
+                    b.HasOne("BolaoWebAPI.Domain.Entities.Bolao", null)
+                        .WithMany()
+                        .HasForeignKey("BolaoId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("BolaoWebAPI.Domain.Entities.Resultado", b =>
                 {
                     b.HasOne("BolaoWebAPI.Domain.Entities.Bolao", null)
                         .WithMany()

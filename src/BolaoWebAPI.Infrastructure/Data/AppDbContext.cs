@@ -20,16 +20,15 @@ namespace BolaoWebAPI.Infrastructure.Data
         public DbSet<BolaoParticipante> BolaoParticipantes { get; set; }
         public DbSet<Jogo> Jogos { get; set; }
         public DbSet<Modalidade> Modalidades { get; set; }
-        public DbSet<Resultado> Resultados { get; set; }
+        public DbSet<Resultado> Resultados { get; set; }        
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            base.OnModelCreating(modelBuilder);
-
             modelBuilder.HasDefaultSchema("bolao");
 
-            modelBuilder.ApplyConfigurationsFromAssembly(
-                typeof(AppDbContext).Assembly);
+            modelBuilder.ApplyConfigurationsFromAssembly(typeof(AppDbContext).Assembly);
+
+            base.OnModelCreating(modelBuilder);
         }
     }
 }
